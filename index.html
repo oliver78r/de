@@ -677,6 +677,46 @@
     }
 
     /* =========================
+       BOTÓN DE MÚSICA SI EL NAVEGADOR BLOQUEA AUTOPLAY
+    ========================= */
+    .music-unlock {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 1500;
+      transform: translateX(-50%) translateY(18px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      border: 1px solid rgba(179, 138, 74, 0.35);
+      background: rgba(251, 248, 242, 0.94);
+      color: var(--vino);
+      box-shadow: 0 18px 44px rgba(66, 42, 31, 0.16);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
+    }
+
+    .music-unlock.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .music-unlock.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(18px);
+    }
+
+    /* =========================
        RESPONSIVE
     ========================= */
     @media (max-width: 700px) {
@@ -805,6 +845,15 @@
 </head>
 
 <body>
+
+  <!-- MÚSICA DE FONDO
+       Pon tu archivo en la misma carpeta y nómbralo exactamente: canción.mp3 -->
+  <audio id="bgMusic" src="./canción.mp3" preload="auto" autoplay loop playsinline></audio>
+
+  <!-- Si el navegador bloquea el autoplay, aparece este botón elegante -->
+  <button class="music-unlock" id="musicUnlock" type="button">
+    Tocar para activar música
+  </button>
 
   <!-- INTRO -->
   <section class="intro-screen" id="introScreen" aria-label="Pantalla de apertura">
@@ -988,6 +1037,32 @@
   <script>
     const openInvitation = document.getElementById("openInvitation");
     const introScreen = document.getElementById("introScreen");
+    const bgMusic = document.getElementById("bgMusic");
+    const musicUnlock = document.getElementById("musicUnlock");
+
+    // Volumen inicial. Puedes cambiarlo de 0.0 a 1.0
+    bgMusic.volume = 0.65;
+
+    async function reproducirMusica() {
+      try {
+        await bgMusic.play();
+        musicUnlock.classList.add("hide");
+        musicUnlock.classList.remove("show");
+      } catch (error) {
+        // Algunos navegadores bloquean autoplay sin interacción.
+        // En ese caso mostramos un botón bonito para activarla.
+        musicUnlock.classList.add("show");
+        musicUnlock.classList.remove("hide");
+      }
+    }
+
+    // Intenta reproducir desde que carga la página.
+    window.addEventListener("load", reproducirMusica);
+
+    // Si el navegador lo bloquea, cualquier toque/clic del usuario activa la música.
+    document.addEventListener("click", reproducirMusica, { once: true });
+    document.addEventListener("touchstart", reproducirMusica, { once: true });
+    musicUnlock.addEventListener("click", reproducirMusica);
 
     function abrirInvitacion() {
       if (document.body.classList.contains("opened") || document.body.classList.contains("opening")) {
