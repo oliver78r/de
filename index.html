@@ -49,6 +49,46 @@
     }
 
     /* =========================
+       BOTÓN DE MÚSICA SI EL NAVEGADOR BLOQUEA AUTOPLAY
+    ========================= */
+    .music-unlock {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 1500;
+      transform: translateX(-50%) translateY(18px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      border: 1px solid rgba(179, 138, 74, 0.35);
+      background: rgba(251, 248, 242, 0.94);
+      color: var(--vino);
+      box-shadow: 0 18px 44px rgba(66, 42, 31, 0.16);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
+    }
+
+    .music-unlock.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .music-unlock.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(18px);
+    }
+
+    /* =========================
        INTRO / APERTURA
     ========================= */
     .intro-screen {
@@ -413,6 +453,7 @@
       filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.06));
     }
 
+    /* AQUÍ ESTÁ EL AJUSTE DEL SOBRE ABIERTO */
     .sobre-box {
       width: clamp(300px, 84vw, 430px);
       aspect-ratio: 470 / 420;
@@ -420,6 +461,8 @@
       position: relative;
       overflow: hidden;
       z-index: 1;
+      background: transparent;
+      isolation: isolate;
     }
 
     .sobre-box img {
@@ -427,11 +470,12 @@
       width: 212.8%;
       max-width: none;
       height: auto;
-      left: 50%;
+      left: 48.6%;
       top: -111.8%;
       transform: translateX(-50%);
       display: block;
-      filter: drop-shadow(0 18px 32px rgba(84, 28, 40, 0.22));
+      mix-blend-mode: multiply;
+      filter: drop-shadow(0 18px 32px rgba(84, 28, 40, 0.20));
     }
 
     h1 {
@@ -583,6 +627,16 @@
       font-weight: 500;
     }
 
+    .location-lines {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .location-lines .line-strong {
+      color: var(--vino);
+      font-weight: 700;
+    }
+
     .note {
       color: var(--vino-oscuro);
       font-style: italic;
@@ -674,46 +728,6 @@
         opacity: 0.9;
         transform: scale(1.08);
       }
-    }
-
-    /* =========================
-       BOTÓN DE MÚSICA SI EL NAVEGADOR BLOQUEA AUTOPLAY
-    ========================= */
-    .music-unlock {
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
-      z-index: 1500;
-      transform: translateX(-50%) translateY(18px);
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      border: 1px solid rgba(179, 138, 74, 0.35);
-      background: rgba(251, 248, 242, 0.94);
-      color: var(--vino);
-      box-shadow: 0 18px 44px rgba(66, 42, 31, 0.16);
-      border-radius: 999px;
-      padding: 12px 18px;
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
-    }
-
-    .music-unlock.show {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .music-unlock.hide {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateX(-50%) translateY(18px);
     }
 
     /* =========================
@@ -809,6 +823,7 @@
 
       .sobre-box img {
         width: 212.8%;
+        left: 48.1%;
         top: -111.8%;
       }
 
@@ -846,11 +861,10 @@
 
 <body>
 
-  <!-- MÚSICA DE FONDO
-       Pon tu archivo en la misma carpeta y nómbralo exactamente: canción.mp3 -->
+  <!-- MÚSICA DE FONDO -->
   <audio id="bgMusic" src="./cancion.mp3" preload="auto" autoplay loop playsinline></audio>
 
-  <!-- Si el navegador bloquea el autoplay, aparece este botón elegante -->
+  <!-- Si el navegador bloquea el autoplay, aparece este botón -->
   <button class="music-unlock" id="musicUnlock" type="button">
     Tocar para activar música
   </button>
@@ -927,16 +941,7 @@
           </div>
 
           <div class="cta-row">
-            <a
-              class="btn btn-primary"
-              href="https://wa.me/524522876336?text=Hola,%20confirmo%20asistencia%20para%20los%20XV%20de%20Ivana."
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Confirmar por WhatsApp
-            </a>
-
-            <a class="btn btn-secondary" href="#detalles">
+            <a class="btn btn-primary" href="#detalles">
               Ver detalles
             </a>
           </div>
@@ -974,10 +979,9 @@
 
           <h2 class="section-title">Ubicación</h2>
 
-          <div class="text-block">
-            Local sindicato los 3 poderes,<br>
-            calle Jalisco por Avenida Colosio S/N,<br>
-            Col. Tomás Aznar.
+          <div class="text-block location-lines">
+            <span class="line-strong">Local:</span> Sindicato Los 3 Poderes.<br>
+            Calle Jalisco por Av. Colosio S/N, Col. Tomás Aznar.
 
             <div class="cta-row">
               <a
@@ -1040,7 +1044,6 @@
     const bgMusic = document.getElementById("bgMusic");
     const musicUnlock = document.getElementById("musicUnlock");
 
-    // Volumen inicial. Puedes cambiarlo de 0.0 a 1.0
     bgMusic.volume = 0.65;
 
     async function reproducirMusica() {
@@ -1049,17 +1052,12 @@
         musicUnlock.classList.add("hide");
         musicUnlock.classList.remove("show");
       } catch (error) {
-        // Algunos navegadores bloquean autoplay sin interacción.
-        // En ese caso mostramos un botón bonito para activarla.
         musicUnlock.classList.add("show");
         musicUnlock.classList.remove("hide");
       }
     }
 
-    // Intenta reproducir desde que carga la página.
     window.addEventListener("load", reproducirMusica);
-
-    // Si el navegador lo bloquea, cualquier toque/clic del usuario activa la música.
     document.addEventListener("click", reproducirMusica, { once: true });
     document.addEventListener("touchstart", reproducirMusica, { once: true });
     musicUnlock.addEventListener("click", reproducirMusica);
@@ -1068,6 +1066,8 @@
       if (document.body.classList.contains("opened") || document.body.classList.contains("opening")) {
         return;
       }
+
+      reproducirMusica();
 
       document.body.classList.add("opening");
 
